@@ -1,57 +1,79 @@
 import random
 
-class Question:
-    def __init__(self, texte_question, options, reponse_correcte):
-        self.texte_question = texte_question
-        self.options = options
-        self.reponse_correcte = reponse_correcte
+questions = [
+    {
+        "question": "Quelle est la race de chat la plus populaire au monde ?",
+        "choices": ["Persan", "Siamois", "Maine Coon", "Chat domestique"],
+        "correct_choice": 3
+    },
+    {
+        "question": "Combien de doigts (orteils) a généralement un chat domestique normal sur chaque patte avant ?",
+        "choices": ["Quatre", "Cinq", "Six", "Deux"],
+        "correct_choice": 1
+    },
+    {
+        "question": "Quelle est la principale source d'alimentation d'un chat sauvage ?",
+        "choices": ["Légumes", "Fruits", "Viande", "Herbe"],
+        "correct_choice": 2
+    },
+    {
+        "question": "Comment les chats communiquent-ils principalement entre eux ?",
+        "choices": ["En aboyant", "En grognant", "En miaulant", "En chantant"],
+        "correct_choice": 2
+    },
+    {
+        "question": "Quelle race de chat est connue pour sa fourrure sans poils ?",
+        "choices": ["Sphynx", "Persan", "Maine Coon", "Siamois"],
+        "correct_choice": 0
+    },
+    {
+        "question": "Quel est l'âge moyen d'un chat en bonne santé ?",
+        "choices": ["5 ans", "10 ans", "15 ans", "20 ans"],
+        "correct_choice": 2
+    },
+    {
+        "question": "Comment les chats marquent-ils leur territoire ?",
+        "choices": ["En urinant partout", "En griffant les meubles", "En laissant des empreintes de patte", "En frottant leur tête contre les objets"],
+        "correct_choice": 3
+    },
+    {
+        "question": "Quel est le nom du composé chimique qui fait que l'herbe à chat affecte les chats de manière euphorique ?",
+        "choices": ["Catnipine", "Felinine", "Niphrine", "Catatanol"],
+        "correct_choice": 1
+    },
+    {
+        "question": "Combien de moustaches (vibrisses) en moyenne un chat a-t-il sur son museau ?",
+        "choices": ["12", "18", "24", "30"],
+        "correct_choice": 2
+    },
+    {
+        "question": "Quel est le plus grand félin au monde ?",
+        "choices": ["Lion", "Tigre", "Léopard", "Panthère"],
+        "correct_choice": 1
+    }
+]
 
-    def est_correcte(self, reponse_utilisateur):
-        return reponse_utilisateur.lower() == self.reponse_correcte.lower()
+score = 0
 
-class Quiz:
-    def __init__(self, questions):
-        self.questions = questions
-        self.score = 0
+random.shuffle(questions)
 
-    def commencer_quiz(self):
-        random.shuffle(self.questions)
-        for question in self.questions:
-            print(question.texte_question)
-            for i, option in enumerate(question.options, 1):
-                print(f"{chr(96 + i)}) {option}")
+for question in questions:
+    print(f"Question: {question['question']}")
+    random_choices = random.sample(question['choices'], len(question['choices']))
+    index = 0
+    for choice in random_choices:
+        index += 1
+        print(f"{index}.{choice}")
 
-            reponse_utilisateur = self.obtenir_reponse_valide()
-            if question.est_correcte(reponse_utilisateur):
-                print("Correct !\n")
-                self.score += 1
-            else:
-                print(f"Faux. La réponse correcte est {question.reponse_correcte}.\n")
+    user_choice = int(input("Votre réponse (1, 2, 3 ou 4) : "))
+    
+    correct_choice_index = random_choices.index(question['choices'][question['correct_choice']])
+    
+    if user_choice - 1 == correct_choice_index:
+        print("Bonne réponse!\n")
+        score += 1
+    else:
+        print(f"Mauvaise réponse. La réponse correcte est : {question['choices'][question['correct_choice']]}\n")
 
-    def obtenir_reponse_valide(self):
-        reponse_utilisateur = input("Votre réponse (a, b ou c) : ").lower()
-        while reponse_utilisateur not in ['a', 'b', 'c']:
-            print("Réponse non valide. Veuillez entrer a, b ou c.")
-            reponse_utilisateur = input("Votre réponse (a, b ou c) : ").lower()
-        return reponse_utilisateur
+print(f"Votre score final est de {score}/{len(questions)}.")
 
-    def afficher_score(self):
-        print(f"Votre score final est : {self.score}/{len(self.questions)}")
-
-if __name__ == "__main__":
-    questions = [
-        Question("Quel mot-clé est utilisé pour déclarer une fonction en Python?", ["func", "def", "function"], "b"),
-        Question("Comment créez-vous un commentaire en Python?", ["// Commentaire", "# Commentaire", "/* Commentaire */"], "b"),
-        Question("Quelle est la sortie de l'expression 2 + 3 * 4 en Python?", ["20", "14", "18"], "b"),
-        Question("Quel opérateur est utilisé pour la concaténation de chaînes de caractères en Python?", ["&", "+", "%"], "b"),
-        Question("Comment ouvrir un fichier en mode lecture (lecture seule) en Python?", ["open('fichier.txt', 'w')", "open('fichier.txt', 'r')", "open('fichier.txt', 'a')"], "b"),
-        Question("Quelle boucle est utilisée pour itérer sur une séquence en Python?", ["for", "while", "repeat"], "a"),
-        Question("Quelle méthode est utilisée pour ajouter un élément à la fin d'une liste en Python?", ["append()", "add()", "insert()"], "a"),
-        Question("Quelle est la sortie de print('Hello, ' + 'World!') en Python?", ["'Hello, World!'", "'Hello, '", "'World!'"], "a"),
-        Question("Comment vérifiez-vous si une clé existe dans un dictionnaire en Python?", ["contains()", "has_key()", "in"], "c"),
-        Question("Quelle est la méthode pour supprimer un élément d'une liste en Python?", ["remove()", "delete()", "pop()"], "a"),
-    ]
-
-    quiz = Quiz(questions)
-    quiz.commencer_quiz()
-    quiz.afficher_score()
